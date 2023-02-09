@@ -240,23 +240,20 @@ def predict_house_price(n_clicks, neighborhood, residential_units, land_sqft, ta
         'ResidFAR': ResidFAR,
         'age': age
     }
-    print(params_dict)
+    # print(params_dict)
     df = pd.DataFrame(params_dict, index=[0])
 
-    with open('randomforest.pkl', 'rb') as f:
-        rf = joblib.load(f)
     with open('xgboost.pkl', 'rb') as f:
         xgb = joblib.load(f)
     with open('catboost.pkl', 'rb') as f:
         cat = joblib.load(f)
 
-    rf_pred = rf.predict(df)
     xgb_pred = xgb.predict(df)
     cat_pred = cat.predict(df)
 
-    avg = (np.exp((rf_pred + xgb_pred + cat_pred) / 3)).round(2)[0]
+    avg = (np.exp((xgb_pred + cat_pred) / 2)).round(2)[0]
 
     return f"The Predicted House Price is ${avg}"
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server()
