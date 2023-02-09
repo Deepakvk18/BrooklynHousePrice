@@ -246,7 +246,7 @@ def predict_house_price(n_clicks, neighborhood, residential_units, land_sqft, ta
     with open('xgboost.pkl', 'rb') as f:
         xgb = joblib.load(f)
     try:
-        xgb_pred = xgb.predict(df)
+        xgb_pred = np.exp(xgb.predict(df)).round(2)
     except ValueError as e:
         return "Please Enter all the fields"
 
